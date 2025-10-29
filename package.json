@@ -1,0 +1,17 @@
+{
+  "name": "auth-session-management",
+  "version": "1.0.0",
+  "description": "An authentication & session management system built using clean architecure principle",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "frontDev",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.2"
+  }
+}
