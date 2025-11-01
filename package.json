@@ -4,14 +4,21 @@
   "description": "An authentication & session management system built using clean architecure principle",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon --watch src --exec ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "frontDev",
   "license": "ISC",
   "dependencies": {
+    "@fastify/postgres": "^6.0.2",
+    "fastify": "^5.6.1",
+    "fastify-plugin": "^5.1.0",
+    "pg": "^8.16.3",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@types/node": "^24.9.2"
+    "@types/node": "^24.9.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2"
   }
 }
