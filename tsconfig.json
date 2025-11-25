@@ -42,5 +42,7 @@
     "skipLibCheck": true,
     "moduleResolution": "node16",
     "esModuleInterop": true
-  }
+  },
+  
+  "exclude": ["./migrations/*", "test*"]
 }
