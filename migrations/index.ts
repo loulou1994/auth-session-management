@@ -4,9 +4,9 @@ import { Umzug } from "umzug";
 
 import { PostgresMigrationStorage } from "./postgresjs-custom-storage.ts";
 
-const sql = postgres(
-  "postgres://loulou1994:loulou1994@localhost:5432/auth_session_db"
-);
+import "dotenv/config";
+
+const sql = postgres(process.env.DATABASE_URL!);
 
 (async function () {
   try {

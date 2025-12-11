@@ -1,15 +1,16 @@
-import { IUseCase } from "../shared/iuse-case.ts";
-import { IUserRepository } from "../interfaces/user-repository.ts";
-import { User } from "../../entities/user.ts";
+import type { IUseCase } from "../shared/index.ts";
+import type { UserSignup } from "../../shared/types.ts";
+import type { User } from "../../entities/user.ts";
+import type { IUserRepository } from "../interfaces/user-repository.ts";
 
-type UserSignupDto = Pick<User, "username" | "email"> & { password: string };
-
-export class SignupUseCase implements IUseCase<UserSignupDto> {
-  constructor(private userRepository: IUserRepository) {
+export class SignupUseCase implements IUseCase<UserSignup, Promise<User>> {  
+  private userRepository: IUserRepository
+  
+  constructor(userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
-  execute(newUser: UserSignupDto) {
-    return this.userRepository.createUser(newUser);
+  async execute(newUser: UserSignup): Promise<User> {
+    return this.userRepository.createUser(newUser)
   }
 }

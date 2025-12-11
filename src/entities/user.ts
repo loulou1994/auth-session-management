@@ -4,5 +4,3 @@ export type User = {
   email: string;
   passwordHash: string;
 };
-
-export type UserSignup = Omit<User, "id">;

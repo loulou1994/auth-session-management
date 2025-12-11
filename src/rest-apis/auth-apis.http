@@ -1,0 +1,7 @@
+@host = localhost
+@port = 3000
+@baseApiUrl = http://{{host}}:{{port}}/api
+
+###
+
+POST {{baseApiUrl}}/auth/login HTTP/1.1

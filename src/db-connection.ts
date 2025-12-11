@@ -1,8 +1,14 @@
 import postgres from "postgres"
 
 async function startDb(){
-    const sql = postgres('postgres://loulou1994:loulou1994@localhost:5432/auth_session_db')
-    await sql`SELECT 1;`
+    try {
+        const sql = postgres(process.env.DATABASE_URL!)
+        await sql`SELECT 1;`
+        return sql
+    } catch (err) {
+        console.log(`Failed to establish database connection: ${err}`)
+        process.exit(1)
+    }
 }
 
 export default startDb

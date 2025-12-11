@@ -2,10 +2,9 @@
   "name": "auth-session-management",
   "version": "1.0.0",
   "description": "An authentication & session management system built using clean architecure principle",
-  "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --watch src --exec ts-node src/index.ts",
+    "start": "nodemon --watch src --exec ts-node src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db-migrate-create": "ts-node migrations/index.ts create --name",
     "db-migrate-up": "ts-node migrations/index.ts up",
@@ -15,6 +14,7 @@
   "author": "frontDev",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "fastify": "^5.6.1",
     "postgres": "^3.4.7",
     "sequelize": "^6.37.7",
