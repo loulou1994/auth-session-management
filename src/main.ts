@@ -1,12 +1,12 @@
 import Fastify from "fastify";
 
 import startDb from "./db-connection.ts";
-import { UserSignupController } from "./interface-adapters/auth-controllers/signup-controller.ts";
+import { UserSignupController } from "./controllers/auth-controllers/signup-controller.ts";
 import { SignupUseCase } from "./application/auth-use-cases/signup-use-case.ts";
 import { UserRepository } from "./infrastructure/postgresql-repositories/user-repository.ts";
-import { authRoutes } from "./routes/fastify-routes/user-routes.ts";
+import { authRoutes } from "./routes/fastify-routes/auth-routes.ts";
 
-import 'dotenv/config'
+import "dotenv/config";
 
 const fastify = Fastify();
 const PORT = parseInt(process.env.PORT || "") || 3000;

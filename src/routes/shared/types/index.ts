@@ -1,9 +1,12 @@
-import { UserSignupController } from "../../../interface-adapters/auth-controllers/signup-controller.ts"
+import { UserSignupController } from "../../../controllers/auth-controllers/signup-controller.ts";
 
 export type AuthControllers = {
-    userSignupController: UserSignupController
-}
+  userSignupController: UserSignupController;
+};
 
 export interface IRouteModule<Deps, Framework> {
-    (deps: Deps): (webFrameworkIns: Framework, ...args: any[]) => void | Promise<void>
+  (deps: Deps): (
+    webFrameworkIns: Framework,
+    ...args: any[]
+  ) => void | Promise<void>;
 }
