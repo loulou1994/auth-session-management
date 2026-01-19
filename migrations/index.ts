@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import postgres from "postgres";
 import { Umzug } from "umzug";
 
-import { PostgresMigrationStorage } from "./postgresjs-custom-storage.ts";
+import { PostgresMigrationStorage } from "./postgresjs-custom-storage";
 
 import "dotenv/config";
 
@@ -24,7 +24,7 @@ const sql = postgres(process.env.DATABASE_URL!);
           },
           down: async () => {
             const sqlQuery = readFileSync(
-              path!.replace("/migrations", "/migrations/down")
+              path!.replace("/migrations", "/migrations/down"),
             ).toString();
             await sql.unsafe(sqlQuery);
           },

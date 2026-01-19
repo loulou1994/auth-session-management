@@ -4,3 +4,7 @@ export type User = {
   email: string;
   passwordHash: string;
 };
+
+export type UserSignupDto = Omit<User, "id" | "passwordHash"> & {
+  password: string;
+};

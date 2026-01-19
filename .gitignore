@@ -4,3 +4,5 @@ dist
 
 # script to test random code
 /test*
+
+logs

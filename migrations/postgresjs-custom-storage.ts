@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import type { UmzugStorage } from "umzug";
+import { isUmzugStorage, type UmzugStorage } from "umzug";
 
 export class PostgresMigrationStorage implements UmzugStorage {
   private sql: postgres.Sql<{}>;

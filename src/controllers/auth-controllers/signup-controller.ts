@@ -1,55 +1,51 @@
 import z from "zod";
-
 import type {
   IController,
   TRequest,
   TResponse,
-} from "../shared/types/index.ts";
-import { SignupUseCase } from "../../application/auth-use-cases/signup-use-case.ts";
+} from "@controllers/shared/types";
+import { SignupUseCase } from "@application/auth-use-cases/signup-use-case";
+import { InputValidationError } from "@shared/types";
+import { userSignUpSchema } from "./validations";
 
-const userSignUpSchema = z
-  .object({
-    username: z.string().regex(/^[a-zA-Z0-9_-]{3,15}$/),
-    email: z.email(),
-    password: z
-      .string()
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_+}{":;'\[\]]{8,}$/
-      ),
-    passwordConfirm: z.string(),
-  })
-  .refine((data) => data.password === data.passwordConfirm, {
-    message: "Password do not match",
-    path: ["passwordConfirm"],
-  });
+type UserSignupInputDto = {
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+};
 
-type UserSignup = z.infer<typeof userSignUpSchema>;
-
-export class UserSignupController implements IController<UserSignup> {
+export class UserSignupController
+  implements IController<UserSignupInputDto, undefined>
+{
   private signupUseCase: SignupUseCase;
 
   constructor(signupUseCase: SignupUseCase) {
     this.signupUseCase = signupUseCase;
   }
 
-  async execute(req: TRequest<UserSignup>): Promise<TResponse> {
+  async execute(
+    req: TRequest<UserSignupInputDto>
+  ): Promise<Required<TResponse<undefined>>> {
     const isValidUser = userSignUpSchema.safeParse(req.body);
 
-    if (!isValidUser.success || !req.body) {
-      const error = isValidUser.error!;
+    if (isValidUser.success === false && isValidUser.error) {
+      const error = isValidUser.error;
+      const message = "Invalid input entries. Enter correct input values";
+      const errors = z.flattenError(error).fieldErrors;
 
-      return {
-        statusCode: 400,
-        message: z.prettifyError(error),
-        errors: z.flattenError(error).fieldErrors,
-      };
+      throw new InputValidationError(message, errors);
     }
 
-    const newUser = await this.signupUseCase.execute(req.body);
+    const sessionId = await this.signupUseCase.execute(isValidUser.data);
 
     return {
-      statusCode: 201,
-      message: "User signed up successfully!",
+      statusCode: 204,
+      cookies: sessionId,
+      response: {
+        success: true as const,
+        message: "User added successfully"
+      },
     };
   }
 }

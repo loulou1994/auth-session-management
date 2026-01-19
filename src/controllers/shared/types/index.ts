@@ -1,3 +1,9 @@
+import type { ApiSuccessResponse } from "@shared/types/index";
+
+// type Cookies<T> = {
+//     [P in keyof T]: T[P]
+// }
+
 export type TRequest<T> = {
     body?: T;
     cookies?: Record<string, string>
@@ -5,15 +11,14 @@ export type TRequest<T> = {
     queryString?: Record<string, string>
 }
 
-export type TResponse = {
+export type TResponse<T> = {
     statusCode: number,
-    message?: string;
-    data?: string;
+    response: ApiSuccessResponse<T>
     cookies?: Record<string, string>;
-    errors?: Record<string, string[]>;
-    error?: string
+    // errors?: Record<string, string[]>;
+    // error?: string
 }
 
-export interface IController<T> {
-    execute(input: TRequest<T>): Promise<TResponse>
+export interface IController<I, O> {
+    execute(input: TRequest<I>): Promise<TResponse<O>>
 }

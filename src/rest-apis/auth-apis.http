@@ -1,7 +1,18 @@
 @host = localhost
 @port = 3000
-@baseApiUrl = http://{{host}}:{{port}}/api
+@baseApiUrl = http://{{host}}:{{port}}/api/v1
 
 ###
 
-POST {{baseApiUrl}}/auth/login HTTP/1.1
+POST {{baseApiUrl}}/auth/signup HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "new1username",
+    "email": "awholenewEmail1@cona.co",
+    "password": "louLou9209",
+    "passwordConfirm": "louLou9209"
+}
+###
+
+POST {{baseApiUrl}}/auth/signup HTTP/1.1
