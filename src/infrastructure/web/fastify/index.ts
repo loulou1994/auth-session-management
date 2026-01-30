@@ -1,50 +1,35 @@
-import Fastify from "fastify";
+import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
-import cookie from "@fastify/cookie";
 
-import { PinoLogger } from "@infrastructure/web/shared/utils/index";
+import type { PinoLogger } from "@infrastructure/web/shared/utils/index";
+import Fastify from "fastify";
 import { globalErrorHandlerWrapper } from "./middlewares/error-handler";
 
-export default function init (logger: PinoLogger) {
-  const fastify = Fastify();
+export default function init(logger: PinoLogger) {
+	const fastify = Fastify();
 
-  fastify.register(cors);
-  fastify.register(helmet);
-  fastify.register(cookie, {
-    secret: process.env.SESSION_COOKIE_SECRET,
-  });
-  
-  fastify.addHook("onRequest", async (req, _) => {
-    logger.info("request incoming", {
-      requestId: req.id,
-      url: req.url,
-      method: req.method,
-      body: req.body as Record<string, any> | undefined,
-      query: req.query as string,
-    });
-  });
+	fastify.register(cors);
+	fastify.register(helmet);
+	fastify.register(cookie, {
+		secret: process.env.SESSION_COOKIE_SECRET,
+	});
 
-  fastify.setErrorHandler(globalErrorHandlerWrapper(logger));
+	fastify.addHook("onRequest", async (req, _) => {
+		logger.info("request incoming", {
+			requestId: req.id,
+			url: req.url,
+			method: req.method,
+			body: req.body as unknown,
+			query: req.query as string,
+		});
+	});
 
-  fastify.setNotFoundHandler((_, reply) => {
-    reply.code(404).type("text/plain").send("A custom not found");
-  });
+	fastify.setErrorHandler(globalErrorHandlerWrapper(logger));
 
-  return fastify
-  // return {
-  //   fastify,
-  //   listen(port: number) {
-  //     fastify.listen({ port }, (err, addr) => {
-  //       if (err instanceof Error) {
-  //         logger.error(`Couldn't start up server`, {
-  //           stack: err.stack ?? "",
-  //         });
-  //         process.exit(1);
-  //       }
+	fastify.setNotFoundHandler((_, reply) => {
+		reply.code(404).type("text/plain").send("Can't handle the request. Can't find the approriate api");
+	});
 
-  //       logger.info(`Server running at ${addr}, port: ${port}`);
-  //     });
-  //   },
-  // };
-};
+	return fastify;
+}

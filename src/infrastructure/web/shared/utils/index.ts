@@ -1,48 +1,48 @@
 import pino from "pino";
-import { createFile } from "@shared/utils"; 
+import { createFile } from "@shared/utils";
 
 import type { ILogger, LogMetadata } from "../types";
 
 export class PinoLogger implements ILogger {
-  private logger: pino.Logger<never, boolean>;
+	private logger: pino.Logger<never, boolean>;
 
-  private constructor(pinoIns: pino.Logger<never, boolean>) {
-    this.logger = pinoIns;
-  }
+	private constructor(pinoIns: pino.Logger<never, boolean>) {
+		this.logger = pinoIns;
+	}
 
-  static async createLog(): Promise<PinoLogger> {
-    try {
-      const logFilePath = await createFile("logs/log.log");
-      return new PinoLogger(
-      pino(
-        {
-          name: "auth-session",
-          level: "info",
-          messageKey: "message",
-          base: null,
-          timestamp: () =>
-            `,"timestamp":"${new Date(Date.now()).toISOString()}"`,
+	static async createLog(): Promise<PinoLogger> {
+		try {
+			const logFilePath = await createFile("logs/log.log");
+			return new PinoLogger(
+				pino(
+					{
+						name: "auth-session",
+						level: "info",
+						messageKey: "message",
+						base: null,
+						timestamp: () =>
+							`,"timestamp":"${new Date(Date.now()).toISOString()}"`,
 
-          formatters: {
-            level: (label, _) => {
-              return { level: label };
-            },
-          },
-        },
-        pino.destination({ dest: logFilePath, sync: true })
-      )
-    );
-    } catch (err) {
-      console.log(`Error happened while writing the log file.\n${err.message}`)
-      process.exit(1)
-    }
-  }
+						formatters: {
+							level: (label, _) => {
+								return { level: label };
+							},
+						},
+					},
+					pino.destination({ dest: logFilePath, sync: true }),
+				),
+			);
+		} catch (err) {
+			console.log(`Error happened while writing the log file.\n${err.message}`);
+			process.exit(1);
+		}
+	}
 
-  info(message: string, meta?: LogMetadata): void {
-    this.logger.info(meta, message);
-  }
+	info(message: string, meta?: LogMetadata): void {
+		this.logger.info(meta, message);
+	}
 
-  error(message: string, meta?: LogMetadata): void {
-    this.logger.error(meta, message);
-  }
+	error(message: string, meta?: LogMetadata): void {
+		this.logger.error(meta, message);
+	}
 }

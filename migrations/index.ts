@@ -6,7 +6,7 @@ import { PostgresMigrationStorage } from "./postgresjs-custom-storage";
 
 import "dotenv/config";
 
-const sql = postgres(process.env.DATABASE_URL!);
+const sql = postgres(process.env.DATABASE_URL || "");
 
 (async function () {
   try {

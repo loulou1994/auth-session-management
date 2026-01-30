@@ -1,46 +1,50 @@
-type ApiResponse<T=undefined> = {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-  errors?: Record<string, string[]>;
+type ApiResponse<T = undefined> = {
+	success: boolean;
+	data?: T;
+	message?: string;
+	error?: string;
+	errors?: Record<string, string[]>;
 };
 
 export type ApiSuccessResponse<T> = Pick<ApiResponse<T>, "data" | "message"> & {
-  success: true;
+	success: true;
 };
 
 export type ApiErrorResponse = Pick<
-  ApiResponse,
-  "message" | "error" | "errors"
+	ApiResponse,
+	"message" | "error" | "errors"
 > & {
-  success: false;
+	success: false;
 };
 
 export class APIError extends Error {
-  statusCode: number;
-
-  constructor(message: string) {
-    super(message);
-  }
+	statusCode: number;
 }
 
 export class ServiceError extends APIError {
-  cause: string;
+	cause: unknown;
 
-  constructor(message: string, cause: string, statusCode: number = 500) {
-    super(message);
-    this.statusCode = statusCode;
-    this.cause = cause;
-  }
+	constructor(message: string, cause: unknown, statusCode: number = 500) {
+		super(message);
+		this.statusCode = statusCode;
+		this.cause = cause;
+	}
+}
+
+export class ValidationError extends APIError {
+	constructor(message: string, statusCode: number) {
+		super(message);
+		this.statusCode = statusCode
+	}
 }
 
 export class InputValidationError extends APIError {
-  errors: Record<string, any[]>;
+	errors: Record<string, string[]>;
 
-  constructor(message: string, errors: Record<string, any[]>) {
-    super(message);
-    this.errors = errors;
-    this.statusCode = 400;
-  }
+	constructor(message: string, errors: Record<string, string[]>) {
+		super(message);
+		this.errors = errors;
+		this.statusCode = 400;
+	}
 }
+

@@ -1,14 +1,15 @@
 export type SessionData = {
-  userId: string;
-  createdAt: number
-}
+	userId: string;
+	createdAt: number;
+};
 
 export type SessionKey = {
-  sid: string
-}
+	sid: string;
+};
 export interface ISessionStore {
-    create(userId: string): Promise<SessionKey>
-    // validate(sessionId: string): Promise<boolean>
-    // delete(sessionId: string): Promise<void>
-    // getSessionPrefix(sessionId: string): string
+	create(userId: string): Promise<SessionKey>;
+	validate(sessionKey: SessionKey): Promise<void>
+	revoke(sessionKey: SessionKey): Promise<void>
+	// delete(sessionId: string): Promise<void>
+	// getSessionPrefix(sessionId: string): string
 }

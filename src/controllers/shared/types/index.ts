@@ -4,21 +4,21 @@ import type { ApiSuccessResponse } from "@shared/types/index";
 //     [P in keyof T]: T[P]
 // }
 
-export type TRequest<T> = {
-    body?: T;
-    cookies?: Record<string, string>
-    queryParams?: Record<string, string>
-    queryString?: Record<string, string>
-}
+export type TRequest = {
+	body?: unknown;
+	cookies?: Record<string, string | undefined>;
+	queryParams?: Record<string, string>;
+	queryString?: Record<string, string>;
+};
 
-export type TResponse<T> = {
-    statusCode: number,
-    response: ApiSuccessResponse<T>
-    cookies?: Record<string, string>;
-    // errors?: Record<string, string[]>;
-    // error?: string
-}
+export type TResponse<T=undefined> = {
+	statusCode: number;
+	response: ApiSuccessResponse<T>;
+	cookies?: Record<string, string>;
+	// errors?: Record<string, string[]>;
+	// error?: string
+};
 
-export interface IController<I, O> {
-    execute(input: TRequest<I>): Promise<TResponse<O>>
+export interface IController<O=undefined> {
+	execute(input: TRequest): Promise<TResponse<O>>;
 }
