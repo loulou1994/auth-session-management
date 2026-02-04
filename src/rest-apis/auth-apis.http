@@ -9,8 +9,8 @@ POST {{baseApiUrl}}/auth/signup HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "new1username26",
-    "email": "awholenewEmail26@cona.co",
+    "username": "new1username16",
+    "email": "awholenewEmail16@cona.co",
     "password": "louLou9209",
     "passwordConfirm": "louLou9209"
 }

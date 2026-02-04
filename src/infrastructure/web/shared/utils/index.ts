@@ -1,5 +1,5 @@
-import pino from "pino";
 import { createFile } from "@shared/utils";
+import pino from "pino";
 
 import type { ILogger, LogMetadata } from "../types";
 
@@ -13,6 +13,7 @@ export class PinoLogger implements ILogger {
 	static async createLog(): Promise<PinoLogger> {
 		try {
 			const logFilePath = await createFile("logs/log.log");
+			
 			return new PinoLogger(
 				pino(
 					{

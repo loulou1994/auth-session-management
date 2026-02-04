@@ -1,5 +1,5 @@
 import type { IUserRepository } from "@application/repositories/user-repository";
-import type { User, UserLoginDto, UserSignupDto } from "@entities/user";
+import type { User, UserSignupDto } from "@entities/user";
 import type postgres from "postgres";
 import { BaseRepository } from "./base-repository";
 
@@ -27,45 +27,75 @@ export class UserRepository extends BaseRepository implements IUserRepository {
 		return userId;
 	}
 
-	async findEmail(inputUser: UserLoginDto): Promise<User | null> {
+	async findEmail(email: string): Promise<User | null> {
 		const [user] = await this.executeDbOperation(() => {
 			return this.pgClient`
         SELECT * 
         FROM "user"
-        WHERE email = ${inputUser.email}
+        WHERE email = ${email}
       `;
 		});
 
 		if (!user) {
-			return null
+			return null;
 		}
 
 		return {
 			id: user.id,
 			email: user.email,
 			passwordHash: user.passwordhash,
-			username: user.username
-		}
+			username: user.username,
+		};
 	}
 
 	async findUnique(userId: string): Promise<User | null> {
-		const [user] = await this.executeDbOperation(async () => {
-			return await this.pgClient`
+		const [user] = await this.executeDbOperation(
+			async () => {
+				return await this.pgClient`
 				SELECT *
 				FROM "user"
 				WHERE id = ${userId}
-			`
-		}, {
-			operation: "find user"
-		})
+			`;
+			},
+			{
+				operation: "find user",
+			},
+		);
 
-		if (!user) return null
+		if (!user) return null;
 
 		return {
 			id: user.id,
 			username: user.email,
 			email: user.email,
-			passwordHash: user.passwordhash
+			passwordHash: user.passwordhash,
+		};
+	}
+
+	async userExists(newUser: UserSignupDto): Promise<boolean> {
+		const [user] = await this.executeDbOperation(
+			async () => {
+				return await this.pgClient`
+					SELECT 1
+					FROM "user"
+					WHERE username = ${newUser.username} OR email = ${newUser.email}
+				`;
+			},
+			{
+				operation: "user exists",
+			},
+		);
+
+		if (user) {
+			return true
 		}
+
+		return false;
+	}
+
+	async deleteAll(): Promise<void> {
+		await this.pgClient`
+			TRUNCATE TABLE "user"
+		`
 	}
 }

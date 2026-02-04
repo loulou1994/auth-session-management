@@ -3,6 +3,6 @@ dist
 .env
 
 # script to test random code
-/test*
+test.ts
 
 logs

@@ -8,5 +8,6 @@ export abstract class AuthenticatedUseCase {
 
 	protected async requireSession(sessionKey: SessionKey){
         await this.sessionService.validate(sessionKey)
+        await this.sessionService.refresh(sessionKey)
     }
 }

@@ -13,14 +13,14 @@ export class BcryptPwdHasher implements IPasswordHasher {
 		}
 	}
 
-	async compare(hashedPwd: string, password: string): Promise<void> {
+	async compare(hashedPwd: string, password: string): Promise<boolean> {
 		try {
-			await bcrypt.compare(password, hashedPwd);
+			return await bcrypt.compare(password, hashedPwd);
 		} catch (err) {
 			throw createServiceError(
-				"Unknown email and/or incorrect password",
+				"Unexpected error happened while processing your password",
 				err,
-				401,
+				500,
 			);
 		}
 	}

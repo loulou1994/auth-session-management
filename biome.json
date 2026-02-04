@@ -6,7 +6,7 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["src/**/*.{js,ts}", "!migrations", "!tests", "!test.ts"],
+		"includes": ["src/**/*.{js,ts}", "tests/**/*.ts"],
 		"ignoreUnknown": false
 	},
 	"formatter": {

@@ -1,9 +1,10 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
-   "compilerOptions": {
+  "compilerOptions": {
     "target": "ES2022",
     "module": "nodenext",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "outDir": "./dist",
     "strict": false,
     "esModuleInterop": true,
@@ -23,28 +24,40 @@
     "moduleResolution": "nodenext",
     "baseUrl": "./",
     "paths": {
-      "@shared/*": ["src/shared/*"],
-      "@infrastructure/*": ["src/infrastructure/*"],
-      "@controllers/*": ["src/controllers/*"],
-      "@application/*": ["src/application/*"],
-      "@entities/*": ["src/entities/*"],
+      "@shared/*": [
+        "src/shared/*"
+      ],
+      "@infrastructure/*": [
+        "src/infrastructure/*"
+      ],
+      "@controllers/*": [
+        "src/controllers/*"
+      ],
+      "@application/*": [
+        "src/application/*"
+      ],
+      "@entities/*": [
+        "src/entities/*"
+      ]
     },
     "plugins": [
-      {"transform": "typescript-transform-paths"}
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
     ]
   },
-
   "ts-node": {
-    "require": ["tsconfig-paths/register"]
+    "require": [
+      "tsconfig-paths/register"
+    ]
   },
-
   "include": [
-    "src/**/*",
+    "src/**/*"
   ],
-  
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.test.ts"
+    "tests/**/*"
   ]
 }

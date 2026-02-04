@@ -24,7 +24,11 @@ async function bootstrap() {
 		const sqlClient = await startDb();
 		const { redisClient, sessionPrefix } = await startRedisSession();
 		const userRepository = new UserRepository(sqlClient);
-		const redisSession = new RedisSession(redisClient, sessionPrefix);
+		const redisSession = new RedisSession(
+			redisClient,
+			sessionPrefix,
+			userRepository,
+		);
 		const passwordHasher = new BcryptPwdHasher();
 		const userSignupUseCase = new SignupUseCase(
 			userRepository,
@@ -51,7 +55,7 @@ async function bootstrap() {
 				prefix: "/api/v1/auth",
 			},
 		);
-
+		
 		await fastify.listen({ port: PORT });
 		logger.info(
 			`server running on http://${fastify.addresses()[0].address}:${PORT}`,

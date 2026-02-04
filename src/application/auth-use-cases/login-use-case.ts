@@ -1,5 +1,5 @@
-import type { IPasswordHasher } from "@application/services/password-hasher";
 import type { IUserRepository } from "@application/repositories/user-repository";
+import type { IPasswordHasher } from "@application/services/password-hasher";
 import type {
 	ISessionStore,
 	SessionKey,
@@ -15,7 +15,7 @@ export class UserLoginUseCase
 	private sessionService: ISessionStore;
 	private passwordHasher: IPasswordHasher;
 
-	constructor(	
+	constructor(
 		userRepository: IUserRepository,
 		sessionService: ISessionStore,
 		passwordHasher: IPasswordHasher,
@@ -26,7 +26,7 @@ export class UserLoginUseCase
 	}
 
 	async execute(inputUser: UserLoginDto) {
-		const user = await this.userRepository.findEmail(inputUser);
+		const user = await this.userRepository.findEmail(inputUser.email);
 
 		if (user === null) {
 			throw createServiceError(
@@ -36,8 +36,18 @@ export class UserLoginUseCase
 			);
 		}
 
-		await this.passwordHasher.compare(user.passwordHash, inputUser.password);
+		const matches = await this.passwordHasher.compare(
+			user.passwordHash,
+			inputUser.password,
+		);
 
+		if (!matches) {
+			throw createServiceError(
+				"Unknown email and/or incorrect password",
+				null,
+				401,
+			);
+		}
 		return await this.sessionService.create(user.id);
 	}
 }

@@ -15,7 +15,7 @@ const sql = postgres(process.env.DATABASE_URL || "");
     const umzug = new Umzug({
       context: { sql },
       migrations: {
-        glob: import.meta.dirname + "/*.sql",
+        glob: __dirname + "/*.sql",
         resolve: ({ context: { sql }, path, name }) => ({
           name,
           up: async () => {
@@ -33,11 +33,11 @@ const sql = postgres(process.env.DATABASE_URL || "");
       storage: new PostgresMigrationStorage(sql),
       logger: console,
       create: {
-        folder: import.meta.dirname,
+        folder: __dirname,
       },
     });
 
-    if (import.meta.main) {
+    if (__dirname) {
       umzug.runAsCLI().then(() => {
         process.exit(0);
       });

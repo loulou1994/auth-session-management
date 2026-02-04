@@ -5,7 +5,7 @@ import { type ApiSuccessResponse, ServiceError } from "@shared/types";
 
 const envRootDirectory = path.join(
 	process.cwd(),
-	process.env.NODE_ENV != "production" ? "src" : "dist",
+	process.env.NODE_ENV !== "production" ? "src" : "dist",
 );
 
 export async function createFile(filePath: string) {
@@ -45,4 +45,3 @@ export const createServiceError = (
 ): ServiceError => {
 	return new ServiceError(message, cause, statusCode || 500);
 };
-
