@@ -1,11 +1,12 @@
 import { FastifyError } from "@fastify/error";
-import type { ILogger } from "@infrastructure/web/shared/types";
+import type { FastifyReply, FastifyRequest } from "fastify";
+
+import type { ILogger } from "@shared/types";
 import {
 	APIError,
 	type ApiErrorResponse,
 	InputValidationError,
 } from "@shared/types";
-import type { FastifyReply, FastifyRequest } from "fastify";
 
 export function globalErrorHandlerWrapper(logger: ILogger) {
 	return (error: Error, request: FastifyRequest, reply: FastifyReply) => {

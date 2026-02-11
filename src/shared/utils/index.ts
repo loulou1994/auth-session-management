@@ -1,15 +1,14 @@
 import fsPromise from "node:fs/promises";
 import path from "node:path";
 
-import { type ApiSuccessResponse, ServiceError } from "@shared/types";
+import { ServiceError } from "@shared/types";
 
-const envRootDirectory = path.join(
-	process.cwd(),
-	process.env.NODE_ENV !== "production" ? "src" : "dist",
-);
+const envRootDirectory = path.join(process.cwd(), process.env.ROOT || "src");
 
 export async function createFile(filePath: string) {
 	const absFilePath = path.resolve(envRootDirectory, filePath);
+
+	console.log(absFilePath, "\n", envRootDirectory, process.env.ROOT)
 
 	try {
 		if (!absFilePath.startsWith(envRootDirectory)) {
@@ -22,7 +21,7 @@ export async function createFile(filePath: string) {
 		return absFilePath;
 	} catch (err) {
 		throw new Error(
-			`Couldn't create file ${filePath}. Details on the error:\n${err.message}`,
+			`Couldn't create file ${filePath}. Details on the error:\n${(err as Error).message}`,
 		);
 	}
 }

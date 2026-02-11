@@ -22,7 +22,7 @@ POST {{baseApiUrl}}/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "awholenewEmail26@cona.co",
+    "email": "awholenewEmail16@cona.co",
     "password": "louLou9209"
 }
 

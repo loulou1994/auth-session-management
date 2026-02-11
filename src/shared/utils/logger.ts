@@ -1,9 +1,9 @@
-import { createFile } from "@shared/utils";
 import pino from "pino";
 
-import type { ILogger, LogMetadata } from "../types";
+import type { ILogger, LogMetadata } from "@shared/types";
+import { createFile } from "@shared/utils";
 
-export class PinoLogger implements ILogger {
+class PinoLogger implements ILogger {
 	private logger: pino.Logger<never, boolean>;
 
 	private constructor(pinoIns: pino.Logger<never, boolean>) {
@@ -13,7 +13,7 @@ export class PinoLogger implements ILogger {
 	static async createLog(): Promise<PinoLogger> {
 		try {
 			const logFilePath = await createFile("logs/log.log");
-			
+
 			return new PinoLogger(
 				pino(
 					{
@@ -34,7 +34,9 @@ export class PinoLogger implements ILogger {
 				),
 			);
 		} catch (err) {
-			console.log(`Error happened while writing the log file.\n${err.message}`);
+			console.log(
+				`Error happened while writing the log file.\n${(err as Error).message}`,
+			);
 			process.exit(1);
 		}
 	}
@@ -47,3 +49,5 @@ export class PinoLogger implements ILogger {
 		this.logger.error(meta, message);
 	}
 }
+
+export const pinoLogger = PinoLogger.createLog();

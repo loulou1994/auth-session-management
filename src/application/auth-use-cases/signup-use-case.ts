@@ -26,16 +26,12 @@ export class SignupUseCase
 	}
 
 	async execute(user: UserSignupDto) {
-		const userExists = await this.userRepository.userExists(user)
+		const userExists = await this.userRepository.userExists(user);
 
 		if (userExists) {
-			throw createServiceError(
-				"User already exists",
-				null,
-				400
-			)
+			throw createServiceError("User already exists", null, 409);
 		}
-		
+
 		const hashedPassword = await this.passwordHasher.hash(user.password);
 		const userId = await this.userRepository.createUser({
 			...user,

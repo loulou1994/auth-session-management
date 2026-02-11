@@ -26,7 +26,7 @@ export abstract class BaseRepository {
 			detail?: string;
 			constraint_name?: string;
 		};
-
+		
 		switch (pgError.code) {
 			case "23505":
 				throw new DuplicateEntityError(

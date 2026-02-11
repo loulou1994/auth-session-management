@@ -11,7 +11,7 @@ export type TRequest = {
 	queryString?: Record<string, string>;
 };
 
-export type TResponse<T=undefined> = {
+export type TResponse<T = undefined> = {
 	statusCode: number;
 	response: ApiSuccessResponse<T>;
 	cookies?: Record<string, string>;
@@ -19,6 +19,6 @@ export type TResponse<T=undefined> = {
 	// error?: string
 };
 
-export interface IController<O=undefined> {
+export interface IController<O = undefined> {
 	execute(input: TRequest): Promise<TResponse<O>>;
 }

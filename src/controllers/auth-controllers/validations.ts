@@ -11,9 +11,9 @@ export const userSignUpSchema = z
 		email: z.email().max(30),
 		password: z
 			.string()
-			.max(15)
+			.max(16)
 			.regex(
-				/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()=_+}{":;'\[\]]{8,}$/,
+				/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()=_+}{":;'[\]]{8,}$/,
 				{
 					error: "Invalid pattern. Follow the instructed pattern",
 				},
@@ -27,9 +27,9 @@ export const userSignUpSchema = z
 
 export const userLoginSchema = z.object({
 	email: z.email().max(30),
-	password: z.string().max(15)
+	password: z.string().max(15),
 });
 
 export const sessionCookieSchema = z.object({
-	sid: z.string().min(15)
-})
+	sid: z.string().min(15),
+});

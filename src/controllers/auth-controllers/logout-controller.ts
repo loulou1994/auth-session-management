@@ -17,9 +17,10 @@ export class UserLogoutController implements IController {
 	async execute(req: TRequest): Promise<TResponse> {
 		const result = sessionCookieSchema.safeParse(req.cookies);
 
+		// console.log(req.cookies)
 		if (result.success === false) {
 			const message = "You do not have an active session";
-			throw new ValidationError(message, 400);
+			throw new ValidationError(message, 401);
 		}
 
 		await this.logoutUseCase.execute(result.data);

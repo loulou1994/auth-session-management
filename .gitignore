@@ -1,8 +1,10 @@
 /node_modules
 dist
-.env
+.env*
+
+!*.example*
 
 # script to test random code
-test.ts
+test.js
 
 logs

@@ -1,12 +1,12 @@
-import { UserLoginUseCase } from "../../../src/application/auth-use-cases/login-use-case";
+import { UserLoginUseCase } from "@application/auth-use-cases/login-use-case";
 import {
+	makeTestUser,
 	passwordHasher,
 	resetAllMocks,
 	sessionKey,
 	sessionService,
 	userRepository,
-	userTest,
-} from "../../utils";
+} from "@tests/utils";
 
 describe("login use case", () => {
 	const loginUseCase = new UserLoginUseCase(
@@ -14,32 +14,44 @@ describe("login use case", () => {
 		sessionService,
 		passwordHasher,
 	);
-	const { username, ...user } = userTest;
 	beforeAll(() => {
 		resetAllMocks();
 	});
 
 	it("creates a new session successfully", () => {
-		userRepository.findEmail.mockResolvedValue(user.email);
+		const { id, username, pwdHash, ...userTest } = makeTestUser();
+		userRepository.findEmail.mockResolvedValue({
+			...userTest,
+			id,
+			username,
+			password: pwdHash,
+		});
 		passwordHasher.compare.mockResolvedValue(true);
 		sessionService.create.mockResolvedValue(sessionKey);
 
-		expect(loginUseCase.execute(user)).resolves.toBe(sessionKey);
+		expect(loginUseCase.execute(userTest)).resolves.toBe(sessionKey);
 	});
 
 	it("throws service error if email doesn't exist", () => {
+		const { id, username, pwdHash, ...userTest } = makeTestUser();
 		userRepository.findEmail.mockResolvedValue(null);
 
-		expect(loginUseCase.execute(user)).rejects.toThrow(
+		expect(loginUseCase.execute(userTest)).rejects.toThrow(
 			"Unknown email and/or incorrect password",
 		);
 	});
 
 	it("throws service error if password doesn't match", () => {
-		userRepository.findEmail.mockResolvedValue(userTest);
+		const { id, username, pwdHash, ...userTest } = makeTestUser();
+		userRepository.findEmail.mockResolvedValue({
+			...userTest,
+			id,
+			username,
+			password: pwdHash,
+		});
 		passwordHasher.compare.mockResolvedValue(false);
 
-		expect(loginUseCase.execute(user)).rejects.toThrow(
+		expect(loginUseCase.execute(userTest)).rejects.toThrow(
 			"Unknown email and/or incorrect password",
 		);
 	});

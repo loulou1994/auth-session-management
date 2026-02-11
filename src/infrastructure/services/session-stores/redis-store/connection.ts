@@ -1,5 +1,6 @@
 import { createClient } from "redis";
-import { sessionDbConfig } from "src/configs";
+
+import { sessionDbConfig } from "@configs";
 
 export async function startRedisSession() {
 	const redisClient = await createClient({

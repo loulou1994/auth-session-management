@@ -4,6 +4,7 @@ export const sessionCookieOptions = {
 	secure: "auto",
 	sameSite: "none",
 	cookieName: "sid",
+	secret: process.env.SESSION_COOKIE_SECRET,
 } as const;
 
 export const sessionDbConfig = {

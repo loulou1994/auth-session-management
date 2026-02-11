@@ -1,4 +1,6 @@
 import crypto from "node:crypto";
+import type { RedisClientType } from "redis";
+
 import type { IUserRepository } from "@application/repositories/user-repository";
 import type {
 	ISessionStore,
@@ -7,7 +9,6 @@ import type {
 } from "@application/services/session-store";
 import { ServiceError } from "@shared/types";
 import { createServiceError } from "@shared/utils";
-import type { RedisClientType } from "redis";
 
 export class RedisSession implements ISessionStore {
 	private static readonly absoluteTimeout = 60 * 60 * 24 * 7; // 7d in secs
@@ -65,7 +66,6 @@ export class RedisSession implements ISessionStore {
 				await this.revoke({ sid: sessionId });
 				throw createServiceError("User does not exist", null, 400);
 			}
-			
 		} catch (err) {
 			if (err instanceof ServiceError) {
 				throw err;

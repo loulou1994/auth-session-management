@@ -1,6 +1,7 @@
+import bcrypt from "bcrypt";
+
 import type { IPasswordHasher } from "@application/services/password-hasher";
 import { createServiceError } from "@shared/utils";
-import bcrypt from "bcrypt";
 
 export class BcryptPwdHasher implements IPasswordHasher {
 	private static readonly saltRounds = 10;

@@ -1,33 +1,27 @@
-import postgres from "postgres";
-import { isUmzugStorage, type UmzugStorage } from "umzug";
-
-export class PostgresMigrationStorage implements UmzugStorage {
-  private sql: postgres.Sql<{}>;
-  private table: string;
-
-  constructor(sql: postgres.Sql<{}>, tablename: string = "migrations") {
+class PostgresMigrationStorage {
+  constructor(sql, tablename = "migrations") {
     this.sql = sql;
     this.table = tablename;
   }
 
-  async init(): Promise<void> {
+  async init() {
     await this.sql`CREATE TABLE IF NOT EXISTS ${this.sql(this.table)} (
       name TEXT PRIMARY KEY,
       executed_at TIMESTAMPTZ DEFAULT NOW()
     );`;
   }
 
-  async logMigration({ name }: { name: string }): Promise<void> {
+  async logMigration({ name }) {
     await this.sql`INSERT INTO ${this.sql(this.table)} (name)
       VALUES (${name}) ON CONFLICT DO NOTHING;
     `;
   }
 
-  async unlogMigration({ name }: { name: string }): Promise<void> {
+  async unlogMigration({ name }) {
     await this.sql`DELETE FROM ${this.sql(this.table)} WHERE name = ${name};`;
   }
 
-  async executed(): Promise<string[]> {
+  async executed() {
     await this.init()
     const rows = await this.sql`SELECT name FROM
       ${this.sql(this.table)} ORDER BY executed_at ASC;`;
@@ -35,3 +29,5 @@ export class PostgresMigrationStorage implements UmzugStorage {
     return rows.map((r) => r.name);
   }
 }
+
+module.exports = PostgresMigrationStorage

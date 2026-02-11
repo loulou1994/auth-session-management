@@ -5,11 +5,14 @@ const { compilerOptions } = require('./tsconfig.json');
 
 /** @type {import("jest").Config} **/
 module.exports = {
+  preset: "ts-jest",
   testEnvironment: "node",
-  globalSetup: "<rootDir>/jest.setup.js",
+  roots: ["./src/tests/"],
   testMatch: [
-    "<rootDir>/tests/**/*.test.ts"
+    "<rootDir>/src/tests/**/*.test.ts"
   ],
+  moduleFileExtensions: ["ts", "js", "node", "json"],
+  modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>'}),
   transform: {
     "^.+\\.tsx?$": [
@@ -20,4 +23,5 @@ module.exports = {
       }
     ]
   },
+  maxWorkers: 1
 };

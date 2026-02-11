@@ -1,6 +1,7 @@
+import type postgres from "postgres";
+
 import type { IUserRepository } from "@application/repositories/user-repository";
 import type { User, UserSignupDto } from "@entities/user";
-import type postgres from "postgres";
 import { BaseRepository } from "./base-repository";
 
 export class UserRepository extends BaseRepository implements IUserRepository {
@@ -28,7 +29,7 @@ export class UserRepository extends BaseRepository implements IUserRepository {
 	}
 
 	async findEmail(email: string): Promise<User | null> {
-		const [user] = await this.executeDbOperation(() => {
+		const [user] = await this.executeDbOperation(async () => {
 			return this.pgClient`
         SELECT * 
         FROM "user"
@@ -87,7 +88,7 @@ export class UserRepository extends BaseRepository implements IUserRepository {
 		);
 
 		if (user) {
-			return true
+			return true;
 		}
 
 		return false;
@@ -96,6 +97,6 @@ export class UserRepository extends BaseRepository implements IUserRepository {
 	async deleteAll(): Promise<void> {
 		await this.pgClient`
 			TRUNCATE TABLE "user"
-		`
+		`;
 	}
 }

@@ -1,11 +1,11 @@
-import { ServiceError } from "../src/shared/types/index";
+import { ServiceError } from "../shared/types/index";
 
 export const userRepository = {
 	findEmail: jest.fn(),
 	createUser: jest.fn(),
 	findUnique: jest.fn(),
 	userExists: jest.fn(),
-	deleteAll: jest.fn()
+	deleteAll: jest.fn(),
 };
 
 export const passwordHasher = {
@@ -20,15 +20,20 @@ export const sessionService = {
 	refresh: jest.fn(),
 };
 
-export const userTest = {
-	// id: 0o1,
-	username: "test-user",
-	email: "test-email@test.co",
-	password: "loulou478-",
-};
+export function makeTestUser() {
+	const randomId = crypto.randomUUID();
+
+	return {
+		id: randomId,
+		username: `test-user${randomId.slice(-5)}`,
+		email: `test-user${randomId.slice(-5)}@test.co`,
+		password: "louLou9209",
+		pwdHash: "$2b$10$AMjcyK/JTmfPL7xdmnih2Ol4MIWPHMHf6SZis2muIYXUudqf42tU.",
+	};
+}
 
 export const sessionKey = {
-	sid: "randomelygeneratedtestkey",
+	sid: crypto.randomUUID(),
 };
 
 export async function expectServiceError(

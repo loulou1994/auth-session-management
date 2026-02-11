@@ -1,3 +1,5 @@
+import z from "zod";
+
 import type { SignupUseCase } from "@application/auth-use-cases/signup-use-case";
 import { userSignUpSchema } from "@controllers/auth-controllers/validations";
 import type {
@@ -6,22 +8,17 @@ import type {
 	TResponse,
 } from "@controllers/shared/types";
 import { InputValidationError } from "@shared/types";
-import z from "zod";
 
 // type UserSignupInputDto = z.infer<typeof userSignUpSchema>;
 
-export class UserSignupController
-	implements IController
-{
+export class UserSignupController implements IController {
 	private signupUseCase: SignupUseCase;
 
 	constructor(signupUseCase: SignupUseCase) {
 		this.signupUseCase = signupUseCase;
 	}
 
-	async execute(
-		req: TRequest,
-	): Promise<Required<TResponse>> {
+	async execute(req: TRequest): Promise<Required<TResponse>> {
 		const result = userSignUpSchema.safeParse(req.body);
 
 		if (result.success === false && result.error) {
@@ -32,10 +29,15 @@ export class UserSignupController
 			throw new InputValidationError(message, errors);
 		}
 
-		const sessionId = await this.signupUseCase.execute(result.data);
+		const { username, email, password } = result.data;
+		const sessionId = await this.signupUseCase.execute({
+			email,
+			username,
+			password,
+		});
 
 		return {
-			statusCode: 200,
+			statusCode: 201,
 			cookies: sessionId,
 			response: {
 				success: true as const,
