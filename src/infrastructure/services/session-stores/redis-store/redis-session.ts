@@ -54,7 +54,7 @@ export class RedisSession implements ISessionStore {
 			const userSession = (await this.redisClient.hGetAll(
 				sessionId,
 			)) as unknown as SessionData | Record<string, string>;
-
+			
 			if (!("userId" in userSession)) {
 				throw createServiceError("User not authenticated", null, 401);
 			}
@@ -82,18 +82,18 @@ export class RedisSession implements ISessionStore {
 		await this.redisClient.del(`${this.sessionPrefix}${sessionKey.sid}`);
 	}
 
-	async refresh(sessionKey: SessionKey): Promise<void> {
+	async refresh(sessionKey: SessionKey): Promise<SessionKey | undefined> {
 		const sessionId = `${this.sessionPrefix}${sessionKey.sid}`;
 		const userSession = (await this.redisClient.hGetAll(
 			sessionId,
 		)) as unknown as SessionData;
 		const expirationTime = userSession.createdAt + RedisSession.absoluteTimeout;
-		const aDayBeforeExpiryTime = expirationTime - 60 * 60 * 24; // 1d in secs
+		const aDayBeforeExpiryTime = expirationTime - 60 * 60 * 24; // a day before exp in secs
 		const currentTime = Date.now() / 1000;
 
 		if (currentTime >= aDayBeforeExpiryTime && currentTime < expirationTime) {
-			await this.redisClient.hSet(sessionId, "createdAt", Date.now() / 1000);
-			return;
+			// await this.redisClient.hSet(sessionId, "createdAt", Date.now() / 1000);
+			return await this.create(userSession.userId)
 		}
 
 		await this.redisClient.expire(sessionId, RedisSession.idleTimeout);

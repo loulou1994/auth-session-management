@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "An authentication & session management system built using clean architecture principles",
   "scripts": {
-    "dev": "dotenv -- tsc-watch --onSuccess \"node dist/server.js\"",
-    "start": "dotenv -e .env.production -- node dist/server.js",
+    "dev": "dotenv -- tsc-watch --onSuccess \"dotenv -- node dist/server.js\"",
+    "start": "dotenv -e .env.production -e .env -- node dist/server.js",
     "build": "tsc",
     "test": "dotenv -c test -- npm run db-migrate-up && dotenv -c test -- jest",
     "db-migrate-create": "dotenv -- node migrations/index.js create --name",

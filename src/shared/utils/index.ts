@@ -8,8 +8,6 @@ const envRootDirectory = path.join(process.cwd(), process.env.ROOT || "src");
 export async function createFile(filePath: string) {
 	const absFilePath = path.resolve(envRootDirectory, filePath);
 
-	console.log(absFilePath, "\n", envRootDirectory, process.env.ROOT)
-
 	try {
 		if (!absFilePath.startsWith(envRootDirectory)) {
 			throw `The file path seems to be outside of root directory`;
