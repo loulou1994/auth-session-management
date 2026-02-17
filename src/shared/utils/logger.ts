@@ -12,7 +12,7 @@ class PinoLogger implements ILogger {
 
 	static async createLog(): Promise<PinoLogger> {
 		try {
-			const logFilePath = await createFile("logs/log.log");
+			const logFilePath = await createFile("logs", "log.log");
 
 			return new PinoLogger(
 				pino(

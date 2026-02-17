@@ -24,6 +24,7 @@
     "module-alias": "^2.3.3",
     "postgres": "^3.4.7",
     "redis": "^5.10.0",
+    "sanitize-filename": "^1.6.3",
     "umzug": "^3.8.2",
     "zod": "^4.1.12"
   },

@@ -1,26 +1,23 @@
 import fsPromise from "node:fs/promises";
 import path from "node:path";
+import sanitize from "sanitize-filename";
 
 import { ServiceError } from "@shared/types";
 
 const envRootDirectory = path.join(process.cwd(), process.env.ROOT || "src");
 
-export async function createFile(filePath: string) {
-	const absFilePath = path.resolve(envRootDirectory, filePath);
+export async function createFile(directory: string, filename: string) {
+	const sanitizedFileName = sanitize(filename);
+	const absFilePath = path.resolve(envRootDirectory, directory, sanitizedFileName);
 
 	try {
-		if (!absFilePath.startsWith(envRootDirectory)) {
-			throw `The file path seems to be outside of root directory`;
-		}
-
 		await fsPromise.mkdir(path.dirname(absFilePath), { recursive: true });
+
 		(await fsPromise.open(absFilePath, "a")).close();
 
 		return absFilePath;
-	} catch (err) {
-		throw new Error(
-			`Couldn't create file ${filePath}. Details on the error:\n${(err as Error).message}`,
-		);
+	} catch (_) {
+		throw new Error(`Couldn't create file ${filename}`);
 	}
 }
 
